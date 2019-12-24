@@ -9,13 +9,17 @@ class Promise {
         this.reason = null
         
         const resolve = value => {
-            this.value = value
-            this.status = RESOLVED
+            if (this.status === PENDING) {
+                this.value = value
+                this.status = RESOLVED
+            }
         }
 
         const reject = reason => {
-            this.reason = reason
-            this.status = REJECTED
+            if (this.status === PENDING) {
+                this.reason = reason
+                this.status = REJECTED
+            }
         }
         
         excutor(resolve, reject)
