@@ -31,7 +31,7 @@ class Promise {
         }
 
         if (this.status === REJECTED) {
-            onFullfilled(this.reason)
+            onRejected(this.reason)
         }
     }
 }
