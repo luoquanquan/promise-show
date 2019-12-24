@@ -1,13 +1,20 @@
-const Promise = require('./promise')
+const fs = require('fs')
 
-const p = new Promise((resolve, reject) => {
-    setTimeout(() => {
-        resolve('hello world~')
+fs.readFile('1', 'utf8', (err, data) => {
+    if (err) {
+        throw Error(err)
+    }
+    fs.readFile(data, 'utf8', (err, data) => {
+        if (err) {
+            throw Error(err)
+        }
+        fs.readFile(data, 'utf8', (err, data) => {
+            if (err) {
+                throw Error(err)
+            }
+            console.log(data);
+        })
+        
     })
-})
 
-p.then(data => {
-    console.log(data);
-}, err => {
-    console.log(err)
 })
