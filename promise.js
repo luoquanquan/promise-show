@@ -13,15 +13,19 @@ resolvePromise = (p2, x, resolve, reject) => {
         (typeof x === 'object' && x !== null)
         || typeof x === 'function'
     ) {
-        const {then} = x
-        if (typeof then === 'function') {
-            then.call(x, y => {
-                resolvePromise(p2, y, resolve, reject)
-            }, e => {
-                reject(e)
-            })
-        } else {
-            resolve(x)
+        try {
+            const {then} = x
+            if (typeof then === 'function') {
+                then.call(x, y => {
+                    resolvePromise(p2, y, resolve, reject)
+                }, e => {
+                    reject(e)
+                })
+            } else {
+                resolve(x)
+            }
+        } catch (e) {
+            reject(e)
         }
     } else {
         resolve(x)
