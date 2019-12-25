@@ -53,7 +53,12 @@ class Promise {
             }
         }
 
-        excutor(resolve, reject)
+        try {
+            excutor(resolve, reject)
+        } catch (e) {
+            reject(e)
+        }
+
     }
 
     then(onFullfilled, onRejected) {

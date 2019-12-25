@@ -16,9 +16,7 @@ readFile('1')
     .then(data => {console.log(data)}, e => {console.log(e)})
 
 const p = new Promise((resolve, reject) => {
-    resolve(new Promise((resolve, reject) => {
-        resolve('hello world 2.0~')
-    }))
+    throw Error('boom~')
 })
 
 p.then(data => {
