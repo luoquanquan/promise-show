@@ -31,6 +31,9 @@ class Promise {
     }
 
     then(onFullfilled, onRejected) {
+        onFullfilled = typeof onFullfilled === 'function' ? onFullfilled : v => v
+        onRejected = typeof onRejected === 'function' ? onRejected : e => {throw e}
+
         return new Promise((resolve, reject) => {
             if (this.status === RESOLVED) {
                 try {
