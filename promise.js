@@ -57,6 +57,7 @@ class Promise {
                 this.onFulfilledCallbacks.push(() => {
                     try {
                         const x = onFullfilled(this.value)
+                        console.log(`当前时间 ${Date.now()}: debug 的数据是 x: `, x)
                         resolve(x)
                     } catch (e) {
                         reject(e)
