@@ -12,6 +12,7 @@ const readFile = filePath => new Promise((resolve, reject) => {
 
 readFile('1')
     .then(data => data, e => {console.log(e)})
+    .then()
     .then(data => {console.log(data)}, e => {console.log(e)})
 
 
