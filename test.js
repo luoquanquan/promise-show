@@ -15,4 +15,17 @@ readFile('1')
     .then(data => readFile(data), e => {console.log(e)})
     .then(data => {console.log(data)}, e => {console.log(e)})
 
+const p = new Promise((resolve, reject) => {
+    resolve(new Promise((resolve, reject) => {
+        resolve('hello world 2.0~')
+    }))
+})
+
+p.then(data => {
+    console.log('data ', data)
+}, e => {
+    console.log('err ', e)
+})
+
+
 

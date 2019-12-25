@@ -34,6 +34,10 @@ class Promise {
         this.onRejectedCallbacks = []
 
         const resolve = value => {
+            if (value instanceof Promise) {
+                return value.then(data => resolve(data), e =>  reject(e))
+            }
+
             if (this.status === PENDING) {
                 this.value = value
                 this.status = RESOLVED
