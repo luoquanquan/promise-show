@@ -2,7 +2,10 @@ const PENDING = 'PENDING'
 const RESOLVED = 'RESOLVED'
 const REJECTED = 'REJECTED'
 
-resolvePromise = (x, resolve, reject) => {
+resolvePromise = (p2, x, resolve, reject) => {
+    if (p2 === x) {
+        reject(new TypeError('Circular reference'))
+    }
     // 鸭子类型判断 Promise
     // 如果可以有属性的东西
     // 且有 then 方法, 认为它是一个 Promise 对象
@@ -13,7 +16,7 @@ resolvePromise = (x, resolve, reject) => {
         const {then} = x
         if (typeof then === 'function') {
             then.call(x, y => {
-                resolvePromise(y, resolve, reject)
+                resolvePromise(p2, y, resolve, reject)
             }, e => {
                 reject(e)
             })
@@ -65,44 +68,54 @@ class Promise {
         onFullfilled = typeof onFullfilled === 'function' ? onFullfilled : v => v
         onRejected = typeof onRejected === 'function' ? onRejected : e => {throw e}
 
-        return new Promise((resolve, reject) => {
+        const p2 = new Promise((resolve, reject) => {
             if (this.status === RESOLVED) {
-                try {
-                    const x = onFullfilled(this.value)
-                    resolvePromise(x, resolve, reject)
-                } catch (e) {
-                    reject(e)
-                }
+                setTimeout(() => {
+                    try {
+                        const x = onFullfilled(this.value)
+                        resolvePromise(p2, x, resolve, reject)
+                    } catch (e) {
+                        reject(e)
+                    }
+                });
             }
 
             if (this.status === REJECTED) {
-                try {
-                    const x = onRejected(this.reason)
-                    resolvePromise(x, resolve, reject)
-                } catch (e) {
-                    reject(e)
-                }
+                setTimeout(() => {
+                    try {
+                        const x = onRejected(this.reason)
+                        resolvePromise(p2, x, resolve, reject)
+                    } catch (e) {
+                        reject(e)
+                    }
+                });
             }
 
             if (this.status === PENDING) {
                 this.onFulfilledCallbacks.push(() => {
-                    try {
-                        const x = onFullfilled(this.value)
-                        resolvePromise(x, resolve, reject)
-                    } catch (e) {
-                        reject(e)
-                    }
+                    setTimeout(() => {
+                        try {
+                            const x = onFullfilled(this.value)
+                            resolvePromise(p2, x, resolve, reject)
+                        } catch (e) {
+                            reject(e)
+                        }
+                    });
                 })
                 this.onRejectedCallbacks.push(() => {
-                    try {
-                        const x = onRejected(this.reason)
-                        resolvePromise(x, resolve, reject)
-                    } catch (e) {
-                        reject(e)
-                    }
+                    setTimeout(() => {
+                        try {
+                            const x = onRejected(this.reason)
+                            resolvePromise(p2, x, resolve, reject)
+                        } catch (e) {
+                            reject(e)
+                        }
+                    });
                 })
             }
         })
+
+        return p2
     }
 }
 
