@@ -6,6 +6,8 @@ resolvePromise = (p2, x, resolve, reject) => {
     if (p2 === x) {
         reject(new TypeError('Circular reference'))
     }
+
+    let called = false
     // 鸭子类型判断 Promise
     // 如果可以有属性的东西
     // 且有 then 方法, 认为它是一个 Promise 对象
@@ -17,14 +19,20 @@ resolvePromise = (p2, x, resolve, reject) => {
             const {then} = x
             if (typeof then === 'function') {
                 then.call(x, y => {
+                    if (called) return
+                    called = true
                     resolvePromise(p2, y, resolve, reject)
                 }, e => {
+                    if (called) return
+                    called = true
                     reject(e)
                 })
             } else {
                 resolve(x)
             }
         } catch (e) {
+            if (called) return
+            called = true
             reject(e)
         }
     } else {
