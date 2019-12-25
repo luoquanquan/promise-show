@@ -1,20 +1,20 @@
 const fs = require('fs')
 
-fs.readFile('1', 'utf8', (err, data) => {
-    if (err) {
-        throw Error(err)
-    }
-    fs.readFile(data, 'utf8', (err, data) => {
+const readFile = filePath => new Promise((resolve, reject) => {
+    fs.readFile(filePath, 'utf8', (err, data) => {
         if (err) {
-            throw Error(err)
+            reject(err)
         }
-        fs.readFile(data, 'utf8', (err, data) => {
-            if (err) {
-                throw Error(err)
-            }
-            console.log(data);
-        })
-        
+        resolve(data)
     })
-
 })
+
+readFile('1').then(data => {
+        readFile(data).then(data => {
+            readFile(data).then(data => {
+                console.log(data)
+            }, err => {console.log(err)})
+        }, err => {console.log(err)})
+    }, err => {console.log(err)})
+
+
