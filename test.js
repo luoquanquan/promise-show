@@ -1,4 +1,5 @@
 const fs = require('fs')
+const Promise = require('./promise')
 
 const readFile = filePath => new Promise((resolve, reject) => {
     fs.readFile(filePath, 'utf8', (err, data) => {
