@@ -1,5 +1,4 @@
 const fs = require('fs')
-const Promise = require('./promise')
 
 const readFile = filePath => new Promise((resolve, reject) => {
     fs.readFile(filePath, 'utf8', (err, data) => {
@@ -10,12 +9,8 @@ const readFile = filePath => new Promise((resolve, reject) => {
     })
 })
 
-readFile('1').then(data => {
-        readFile(data).then(data => {
-            readFile(data).then(data => {
-                console.log(data)
-            }, err => {console.log(err)})
-        }, err => {console.log(err)})
-    }, err => {console.log(err)})
+readFile('1')
+    .then(data => data, e => {console.log(e)})
+    .then(data => {console.log(data)}, e => {console.log(e)})
 
 
