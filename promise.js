@@ -60,7 +60,7 @@ class Promise {
             if (this.status === RESOLVED) {
                 try {
                     const x = onFullfilled(this.value)
-                    resolve(x)
+                    resolvePromise(x, resolve, reject)
                 } catch (e) {
                     reject(e)
                 }
@@ -69,7 +69,7 @@ class Promise {
             if (this.status === REJECTED) {
                 try {
                     const x = onRejected(this.reason)
-                    resolve(x)
+                    resolvePromise(x, resolve, reject)
                 } catch (e) {
                     reject(e)
                 }
@@ -87,7 +87,7 @@ class Promise {
                 this.onRejectedCallbacks.push(() => {
                     try {
                         const x = onRejected(this.reason)
-                        resolve(x)
+                        resolvePromise(x, resolve, reject)
                     } catch (e) {
                         reject(e)
                     }
